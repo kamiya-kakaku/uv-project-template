@@ -1,0 +1,64 @@
+[project]
+name = "{{cookiecutter.package_name}}"
+version = "0.1.0"
+description = ""
+readme = "README.md"
+requires-python = ">={{ cookiecutter.python_version }}"
+dependencies = []
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+dev-dependencies = [
+    "ipykernel>=6.29.5",
+    "jupyterlab>=4.2.5",
+    "poethepoet>=0.28.0",
+    "pytest>=8.3.2",
+    "ruff>=0.6.3",
+]
+
+[tool.poe.tasks]
+test = "uv run pytest tests"
+lint = "uv run ruff check src tests *.py --fix"
+format = "uv run ruff format src tests *.py"
+isort = "uv run ruff check src tests *.py --select I --fix-only"
+x = ["lint", "format", "isort"]
+
+[tool.ruff]
+lint.ignore = [
+    "A003", # Class attribute `id` is shadowing a Python builtin
+    "D100", # Missing docstring in public module
+    "D101", # Missing docstring in public class
+    "D104", # Missing docstring in public package
+    "D106", # Missing docstring in public nested class
+    "D107", # Missing docstring in __init__
+    "PD901", # df is a bad variable name. Be kinder to your future self.
+    "RUF001", # String contains ambiguous {}. Did you mean {}?
+    "RUF002", # Docstring contains ambiguous {}. Did you mean {}
+    "RUF003", # Comment contains ambiguous {}. Did you mean {}?
+    "PLC1901", # {existing} can be simplified to {replacement} as an empty string is falsey
+    "PLR2004", # Magic value used in comparison, consider replacing {value} with a constant variable
+    "ANN101", # Missing type annotation for {name} in method
+    "ANN102", # Missing type annotation for *{name}
+    "ANN002", # Missing type annotation for *{name}
+    "ANN003", # Missing type annotation for **{name}
+    "COM812", # Trailing comma missing
+    "ERA", # Found commented-out code
+    "FA102", # Missing `from __future__ import annotations`
+    "ISC001", # Implicitly concatenated string literals on one line
+    "PGH004", # Use specific rule codes when using noqa
+    "S101",  # Use of `assert` detected
+]
+
+line-length = 120
+lint.select = [
+    "ALL"
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.pylint]
+max-args = 10
